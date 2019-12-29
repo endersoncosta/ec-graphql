@@ -1,35 +1,10 @@
-const { ApolloServer, gql } = require('apollo-server');
+require('dotenv').config()
 
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
 
-  type Query {
-    books: [Book]
-  }
-`;
+const { ApolloServer } = require('apollo-server');
+const resolvers = require("./resolvers/books.resolver.js");
+const typeDefs = require("./schemas/books.schema.js");
 
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
+const app = new ApolloServer({ typeDefs, resolvers });
 
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen(3000).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+module.exports = app;
